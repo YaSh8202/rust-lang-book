@@ -1,22 +1,51 @@
-pub trait Iterator<T>{
-    fn next(&mut self) -> Option<T>;
+use std::ops::Add;
+use std::fmt::Display;
+
+#[derive(Debug, PartialEq)]
+struct Point{
+    x: i32,
+    y: i32,
 }
 
+impl Add for Point{
+     type Output = Point;
 
-struct Counter {}
-
-impl Iterator<u32> for Counter {
-    fn next(&mut self) -> Option<u32> {
-        Some(0)
+    fn add(self, rhs: Self) -> Self::Output {
+        Point {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+        }
     }
 }
 
-impl Iterator<u16> for Counter {
-    fn next(&mut self) -> Option<u16> {
-        Some(0)
+struct Millimeters(u32);
+
+struct Meters(u32);
+
+impl Add<Meters> for Millimeters{
+    type Output = Millimeters;
+    fn add(self, rhs: Meters) -> Self::Output {
+        Millimeters(self.0 + (rhs.0 * 1000))
     }
 }
 
-fn main() {
-    println!("Hello, world!");
+impl Display for Millimeters{
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}mm", self.0)
+    }
+}
+
+fn main(){
+    let p1 = Point { x: 1, y: 0 };
+    let p2 = Point { x: 2, y: 3 };
+    let p3 = p1 + p2;
+    assert_eq!(p3, Point { x: 3, y: 3 });
+    println!("{:?}", p3);
+
+
+    let mm = Millimeters(1000);
+    let m = Meters(1);
+
+    let mm_plus_m = mm + m;
+    println!("{}", mm_plus_m);
 }

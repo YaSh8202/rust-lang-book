@@ -70,6 +70,14 @@ impl Wizard for Human{
     }
 }
 
+
+trait OutlinePrint: Display{
+    fn outline_print(&self){
+        let output = self.to_string(); // to_string is a trait method that converts the type to a String , Display trait
+        let len = output.len();
+    }
+}
+
 fn main(){
     // let p1 = Point { x: 1, y: 0 };
     // let p2 = Point { x: 2, y: 3 };
